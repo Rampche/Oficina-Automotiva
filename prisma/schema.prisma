@@ -11,17 +11,37 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
+  user_id  Int     @id @default(autoincrement())
   login    String  @unique @db.VarChar(255)
   password String  @db.VarChar(255)
   deleted  Boolean @default(false)
 }
 
 model Car {
-  id           Int    @id @default(autoincrement())
-  registration String @db.VarChar(255)
-  brand        String @db.VarChar(255)
-  model        String @db.VarChar(255)
-  color        String @db.VarChar(255)
-  observations String @db.VarChar(255)
+  car_id       Int     @id @default(autoincrement())
+  registration String  @unique @db.VarChar(255)
+  brand        String  @db.VarChar(255)
+  model        String  @db.VarChar(255)
+  color        String  @db.VarChar(255)
+  observations String  @db.VarChar(255)
+  Order        Order[]
+}
+
+model Order {
+  order_id   Int      @id @default(autoincrement())
+  order_date DateTime
+  order_time DateTime
+  total      Float
+  //item       Item[]
+  deleted    Boolean  @default(false)
+  carId      Int      @unique
+  car        Car      @relation(fields: [carId], references: [car_id])
+}
+
+model Item {
+  item_id Int    @id @default(autoincrement())
+  name    String
+  value   Float
+
+  //orders  Order[] @relation(references: [order_id])
 }
