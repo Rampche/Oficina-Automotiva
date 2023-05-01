@@ -18,30 +18,48 @@ model User {
 }
 
 model Car {
-  car_id       Int     @id @default(autoincrement())
+  car_id       String  @id @default(uuid())
   registration String  @unique @db.VarChar(255)
   brand        String  @db.VarChar(255)
   model        String  @db.VarChar(255)
   color        String  @db.VarChar(255)
   observations String  @db.VarChar(255)
-  Order        Order[]
+  orders       Order[]
 }
 
 model Order {
-  order_id   Int      @id @default(autoincrement())
-  order_date DateTime
-  order_time DateTime
-  total      Float
-  //item       Item[]
-  deleted    Boolean  @default(false)
-  carId      Int      @unique
-  car        Car      @relation(fields: [carId], references: [car_id])
+  order_id   String    @id @default(uuid())
+  order_date DateTime  @db.Date
+  order_time DateTime  @db.Time()
+  item_list  String    @db.VarChar(255)
+  total      Float     @db.Float
+  deleted    Boolean   @default(false)
+  car        Car       @relation(fields: [carId], references: [car_id])
+  carId      String    @unique
+  items       Item[]
 }
 
 model Item {
-  item_id Int    @id @default(autoincrement())
-  name    String
-  value   Float
-
-  //orders  Order[] @relation(references: [order_id])
+  item_id String    @id @default(uuid())
+  name    String    @db.VarChar(255)
+  value   Float     @db.Float
+  orders  Order     @relation(fields: [orderId], references: [order_id])
+  orderId String    @unique
 }
+
+// https://www.prisma.io
+
+// npm i prisma -D
+
+// npx prisma init
+
+// npx prisma migrate dev --name initial
+
+// npm i @prisma/client
+
+// caso não consigam migrar para a base da dados de casa usar o comando npx migrate reset
+
+//npx prisma db pull
+
+//Se for preciso só att o prisma client:
+//npx prisma generate
