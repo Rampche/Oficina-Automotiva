@@ -26,29 +26,28 @@ model Car {
   color        String  @db.VarChar(255)
   observations String  @db.VarChar(255)
   orders       Order[]
-  deleted Boolean @default(false)
-  
+  deleted      Boolean @default(false)
 }
 
 model Order {
-  order_id   String    @id @default(uuid())
-  order_date DateTime  @db.Date
-  order_time DateTime  @db.Time()
-  total      Float     @db.Float
-  deleted    Boolean   @default(false)
-  car        Car       @relation(fields: [carId], references: [car_id])
-  carId      String    @unique
+  order_id   String   @id @default(uuid())
+  order_date DateTime @db.Date
+  order_time DateTime @db.Time()
+  total      Float?   @db.Float
+  deleted    Boolean  @default(false)
+  car        Car      @relation(fields: [carId], references: [car_id])
+  carId      String   @unique
   items      Item[]
   userId     String
-  user       User      @relation(fields:[userId], references: [user_id])
+  user       User     @relation(fields: [userId], references: [user_id])
 }
 
 model Item {
-  item_id String    @id @default(uuid())
-  name    String    @db.VarChar(255)
-  value   Float     @db.Float
-  orders  Order     @relation(fields: [orderId], references: [order_id])
-  orderId String    @unique
+  item_id String @id @default(uuid())
+  name    String @db.VarChar(255)
+  value   Float  @db.Float
+  order   Order  @relation(fields: [orderId], references: [order_id])
+  orderId String @unique
 }
 
 // https://www.prisma.io

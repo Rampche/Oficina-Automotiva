@@ -1,5 +1,6 @@
-import { PrismaClient, Order } from '@prisma/client';
-import { Item } from '../models/types';
+//import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
+import { Item } from "../models/types";
 
 export const prisma = new PrismaClient();
 
@@ -30,42 +31,40 @@ const detail = (order_id: string) => {
 };
 
 //Add new orders
-const add = async (userId: string, itemsId: string[], carId: string) => {
-  //First, it is necessary to find items value:
-  const items = await prisma.item.findMany({
+const add = (car: string, items: string[]) =>
+  prisma.order.create({
+    data: {
+      car,
+      items,
+      order_date,
+      order_time,
+      total,
+      deleted,
+
+    },
+  });
+
+//Update orders
+const update = (order_id: string, itemIds: string[]) =>
+  prisma.order.update({
     where: {
-      item_id: {
-        in: itemsId,
+      order_id,
+    },
+    data: {
+      items: {
+        connect: itemIds.map((itemId) => ({ item_id: itemId })),
       },
     },
   });
 
-  //Them calculate the total amount:
-  const total = items.reduce((acc: number, item: Item) => acc + item.value, 0);
-
-  return prisma.order.create({
+//Remove orders
+const remove = (order_id: string) => {
+  prisma.order.update({
+    where: { order_id },
     data: {
-      user: {
-        connect: {
-          user_id: userId,
-        },
-      },
-      items: {
-        connect: itemsId.map((itemId) => ({
-          item_id: itemId,
-        })),
-      },
-      car: {
-        connect: { car_id: carId },
-      },
-      order_date: new Date(),
-      order_time: new Date().toLocaleTimeString(),
-      total: total,
-    },
-    include: {
-      car: true,
+      deleted: true,
     },
   });
 };
 
-export { list, detail, add };
+export { list, detail, add, update, remove };
