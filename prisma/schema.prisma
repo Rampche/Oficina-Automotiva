@@ -34,7 +34,6 @@ model Order {
   order_id   String    @id @default(uuid())
   order_date DateTime  @db.Date
   order_time DateTime  @db.Time()
-  item_list  String    @db.VarChar(255)
   total      Float     @db.Float
   deleted    Boolean   @default(false)
   car        Car       @relation(fields: [carId], references: [car_id])
