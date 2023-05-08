@@ -11,10 +11,11 @@ datasource db {
 }
 
 model User {
-  user_id  Int     @id @default(autoincrement())
+  user_id  String  @id @default(uuid())
   login    String  @unique @db.VarChar(255)
   password String  @db.VarChar(255)
   deleted  Boolean @default(false)
+  orders   Order[]
 }
 
 model Car {
@@ -25,6 +26,8 @@ model Car {
   color        String  @db.VarChar(255)
   observations String  @db.VarChar(255)
   orders       Order[]
+  deleted Boolean @default(false)
+  
 }
 
 model Order {
@@ -36,7 +39,9 @@ model Order {
   deleted    Boolean   @default(false)
   car        Car       @relation(fields: [carId], references: [car_id])
   carId      String    @unique
-  items       Item[]
+  items      Item[]
+  userId     String
+  user       User      @relation(fields:[userId], references: [user_id])
 }
 
 model Item {
