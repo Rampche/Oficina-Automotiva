@@ -1,6 +1,6 @@
 //import { PrismaClient } from '@prisma/client';
-import { PrismaClient } from "@prisma/client";
-import { Item } from "../models/types";
+import { PrismaClient } from '@prisma/client';
+import { Item } from '../models/types';
 
 export const prisma = new PrismaClient();
 
@@ -40,7 +40,6 @@ const add = (car: string, items: string[]) =>
       order_time,
       total,
       deleted,
-
     },
   });
 

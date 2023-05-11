@@ -20,26 +20,27 @@ model User {
 
 model Car {
   car_id       String  @id @default(uuid())
-  registration String  @unique @db.VarChar(255)
   brand        String  @db.VarChar(255)
   model        String  @db.VarChar(255)
   color        String  @db.VarChar(255)
-  observations String  @db.VarChar(255)
+  registration String  @db.VarChar(255)
+  observation  String  @db.VarChar(255)
   orders       Order[]
   deleted      Boolean @default(false)
 }
 
 model Order {
-  order_id   String   @id @default(uuid())
-  order_date DateTime @db.Date
-  order_time DateTime @db.Time()
-  total      Float?   @db.Float
-  deleted    Boolean  @default(false)
-  car        Car      @relation(fields: [carId], references: [car_id])
-  carId      String   @unique
-  items      Item[]
-  userId     String
-  user       User     @relation(fields: [userId], references: [user_id])
+  order_id     String   @id @default(uuid())
+  order_number Int      @db.Int
+  order_date   DateTime @db.Date
+  order_time   DateTime @db.Time()
+  total        Float?   @db.Float
+  deleted      Boolean  @default(false)
+  car          Car      @relation(fields: [carId], references: [car_id])
+  carId        String   @unique
+  items        Item[]
+  userId       String
+  user         User     @relation(fields: [userId], references: [user_id])
 }
 
 model Item {
