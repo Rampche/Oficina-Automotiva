@@ -1,14 +1,14 @@
 //import { PrismaClient } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-import { Item } from '../models/types';
+import { Order } from '../models/order';
 
 export const prisma = new PrismaClient();
 
 //List all service orders
-const list = (userId: string) => {
+const list = (order_id: string) => {
   prisma.order.findMany({
     where: {
-      userId,
+      order_id,
       deleted: false,
     },
     include: {
@@ -31,16 +31,20 @@ const detail = (order_id: string) => {
 };
 
 //Add new orders
-const add = (car: string, items: string[]) =>
+const create = (order: Order, car_id: string, user_id: string) =>
   prisma.order.create({
     data: {
-      car,
-      items,
-      order_date,
-      order_time,
-      total,
-      deleted,
+      ...order,
+      car: {
+        connect: { car_id },
+      },
+      user: {
+        connect: { user_id },
+      },
     },
+    /* include: {
+      items: true
+    } */
   });
 
 //Update orders
@@ -66,4 +70,4 @@ const remove = (order_id: string) => {
   });
 };
 
-export { list, detail, add, update, remove };
+export { list, detail, create, update, remove };
