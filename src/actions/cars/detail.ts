@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { read } from '../../services/cars';
+import { detail } from '../../services/cars';
 
 export default async (req: Request, res: Response) => {
-  const { car_id } = req.params;
+  const { id } = req.params;
 
-  const car = await read(car_id);
+  const car = await detail(id);
 
   if (!car) {
     return res.status(404).json({

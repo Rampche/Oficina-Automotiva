@@ -38,12 +38,15 @@ const list = () =>
   });
 
 //Detail a user
-const read = (user_id: string) =>
+const detail = (user_id: string) =>
   prisma.user.findFirst({
     where: {
       user_id,
       deleted: false,
     },
+    include: {
+      orders: true,
+    },
   });
 
-export { create, read, update, remove, list };
+export { create, detail, update, remove, list };

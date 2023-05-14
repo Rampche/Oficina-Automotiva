@@ -5,20 +5,15 @@ import { Order } from '../models/order';
 export const prisma = new PrismaClient();
 
 //List all service orders
-const list = (order_id: string) => {
+const list = () =>
   prisma.order.findMany({
     where: {
-      order_id,
       deleted: false,
     },
-    include: {
-      car: true,
-    },
   });
-};
 
 //Detail the orders
-const detail = (order_id: string) => {
+const detail = (order_id: string) =>
   prisma.order.findFirst({
     where: {
       order_id,
@@ -28,34 +23,41 @@ const detail = (order_id: string) => {
       car: true,
     },
   });
-};
 
 //Add new orders
-const create = (order: Order, car_id: string, user_id: string) =>
+const create = (order: Order, carId: string, userId: string) =>
   prisma.order.create({
     data: {
       ...order,
       car: {
-        connect: { car_id },
+        connect: { car_id: carId },
       },
       user: {
-        connect: { user_id },
+        connect: { user_id: userId },
       },
     },
-    /* include: {
-      items: true
-    } */
   });
 
 //Update orders
-const update = (order_id: string, itemIds: string[]) =>
+const update = (
+  order_id: string,
+  /* itemIds: string[], */
+  carId: string,
+  userId: string
+) =>
   prisma.order.update({
     where: {
       order_id,
     },
     data: {
-      items: {
+      /* items: {
         connect: itemIds.map((itemId) => ({ item_id: itemId })),
+      }, */
+      car: {
+        connect: { car_id: carId },
+      },
+      user: {
+        connect: { user_id: userId },
       },
     },
   });

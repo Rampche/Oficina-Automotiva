@@ -13,7 +13,6 @@ router.get('/', (req: Request, res: Response) => {
   });
 });
 
-//router.use('/order', orderRoutes);
 router.use('/cars', carsRoutes);
 router.use('/users', usersRoutes);
 router.use('/orders', ordersRoutes);

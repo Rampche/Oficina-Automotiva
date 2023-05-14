@@ -35,15 +35,21 @@ const list = () =>
     where: {
       deleted: false,
     },
+    include: {
+      orders: true,
+    },
   });
 
 //Detail a Car
-const read = (car_id: string) =>
+const detail = (car_id: string) =>
   prisma.car.findFirst({
     where: {
       car_id,
       deleted: false,
     },
+    include: {
+      orders: true,
+    },
   });
 
-export { create, read, update, remove, list };
+export { create, detail, update, remove, list };
