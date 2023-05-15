@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
-import { remove, detail } from '../../services/user';
+import { detail } from '../../services/items';
 
 export default async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { item_id } = req.params;
 
-  if (!(await detail(id))) {
+  const item = await detail(item_id);
+
+  if (!item) {
     return res.status(404).json({
       code: 404,
       message: 'User not found',
     });
   }
 
-  await remove(id);
-  return res.json();
+  return res.json(item);
 };

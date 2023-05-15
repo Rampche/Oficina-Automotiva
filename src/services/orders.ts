@@ -21,11 +21,17 @@ const detail = (order_id: string) =>
     },
     include: {
       car: true,
+      item: true,
     },
   });
 
-//Add new orders
-const create = (order: Order, carId: string, userId: string) =>
+//Create new orders
+const create = (
+  order: Order,
+  carId: string,
+  userId: string,
+  itemIds: number[]
+) =>
   prisma.order.create({
     data: {
       ...order,
@@ -35,8 +41,19 @@ const create = (order: Order, carId: string, userId: string) =>
       user: {
         connect: { user_id: userId },
       },
+      ItemsOnOrders: {
+        connect: itemIds.map((itemId) => ({
+          registration: itemIds,
+        })),
+      },
     },
   });
+
+/* item: {
+    create: itemIds.map((registration: number) => ({
+      items: { connect: { registration: registration } },
+    })),
+  }, */
 
 //Update orders
 const update = (

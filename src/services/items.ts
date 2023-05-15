@@ -4,13 +4,10 @@ import { Item } from '../models/Item';
 export const prisma = new PrismaClient();
 
 //Create a new Item
-const create = (item: Item, order_id: string) =>
+const create = (item: Item) =>
   prisma.item.create({
     data: {
       ...item,
-      order: {
-        connect: { order_id },
-      },
     },
   });
 
@@ -41,7 +38,7 @@ const list = () =>
   });
 
 //Detail a Item
-const read = (item_id: string) =>
+const detail = (item_id: string) =>
   prisma.item.findFirst({
     where: {
       item_id,
@@ -49,4 +46,4 @@ const read = (item_id: string) =>
     },
   });
 
-export { create, read, update, remove, list };
+export { create, detail, update, remove, list };

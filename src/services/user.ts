@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import { User } from '../models/user';
+import { UserInfo } from '../models/user';
 
 export const prisma = new PrismaClient();
 
 //Create a new user
-const create = (user: User) =>
+const create = (user: UserInfo) =>
   prisma.user.create({
     data: {
       ...user,
@@ -12,7 +12,7 @@ const create = (user: User) =>
   });
 
 //Update the user
-const update = (id: string, user: User) =>
+const update = (id: string, user: UserInfo) =>
   prisma.user.update({
     where: { user_id: id },
     data: { ...user },
