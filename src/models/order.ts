@@ -1,4 +1,4 @@
 export interface Order {
-  order_number: number;
+  order_number: string;
   total: number;
 }

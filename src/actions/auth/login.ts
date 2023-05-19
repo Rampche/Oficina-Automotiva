@@ -3,9 +3,9 @@ import { attemptLogin } from '../../services/auth';
 
 export default async (request: Request, response: Response) => {
   try {
-    const { email, password } = request.body;
+    const { login, password } = request.body;
 
-    const user = await attemptLogin(email, password);
+    const user = await attemptLogin(login, password);
 
     return response.json({ user });
   } catch (e: any) {

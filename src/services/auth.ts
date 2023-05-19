@@ -42,7 +42,7 @@ function createToken(user: User): string {
   const token = sign(
     {
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
-      email: user.login,
+      login: user.login,
       user_id: user.user_id,
     },
     'Secret'

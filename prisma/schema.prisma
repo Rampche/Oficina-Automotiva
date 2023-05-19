@@ -31,35 +31,25 @@ model Car {
 }
 
 model Order {
-  order_id        String          @id @default(uuid())
-  order_number    String          @unique @db.VarChar(255)
-  order_date_time DateTime        @default(now()) @db.Timestamp(3)
-  total           Float?          @db.Float
-  deleted         Boolean         @default(false)
-  car             Car             @relation(fields: [carId], references: [car_id])
-  carId           String          @unique
+  order_id        String   @id @default(uuid())
+  order_number    String   @unique @db.VarChar(255)
+  order_date_time DateTime @default(now()) @db.Timestamp(3)
+  total           Float?   @db.Float
+  deleted         Boolean  @default(false)
+  car             Car      @relation(fields: [carId], references: [car_id])
+  carId           String   @unique
   userId          String
-  user            User            @relation(fields: [userId], references: [user_id])
-  item            ItemsOnOrders[]
+  user            User     @relation(fields: [userId], references: [user_id])
+  items           Item[]
 }
 
 model Item {
-  item_id      String          @id @default(uuid())
-  name         String          @db.VarChar(255)
-  value        Float           @db.Float
-  registration String          @unique @db.VarChar(255)
-  deleted      Boolean         @default(false)
-  orders       ItemsOnOrders[]
-}
-
-model ItemsOnOrders {
-  items Item @relation(fields: [registrationId], references: [registration])
-
-  orders         Order  @relation(fields: [orderNumber], references: [order_number])
-  orderNumber    String
-  registrationId String
-
-  @@id([registrationId, orderNumber])
+  item_id      String  @id @default(uuid())
+  name         String  @db.VarChar(255)
+  value        Float   @db.Float
+  registration String  @unique @db.VarChar(255)
+  deleted      Boolean @default(false)
+  orders       Order[]
 }
 
 // https://www.prisma.io

@@ -21,18 +21,24 @@ const detail = (order_id: string) =>
     },
     include: {
       car: true,
-      item: true,
+      items: true,
     },
   });
 
 //Create new orders
-const create = (
+const create = async (
   order: Order,
   carId: string,
   userId: string,
-  itemIds: number[]
-) =>
-  prisma.order.create({
+  itemIds: string[]
+) => {
+  const items = await prisma.item.findMany({
+    where: {
+      registration: { in: itemIds },
+    },
+  });
+
+  return prisma.order.create({
     data: {
       ...order,
       car: {
@@ -41,19 +47,12 @@ const create = (
       user: {
         connect: { user_id: userId },
       },
-      ItemsOnOrders: {
-        connect: itemIds.map((itemId) => ({
-          registration: itemIds,
-        })),
+      items: {
+        connect: items.map((item) => ({ registration: item.registration })),
       },
     },
   });
-
-/* item: {
-    create: itemIds.map((registration: number) => ({
-      items: { connect: { registration: registration } },
-    })),
-  }, */
+};
 
 //Update orders
 const update = (

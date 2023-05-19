@@ -3,16 +3,16 @@ import { register } from '../../services/auth';
 
 export default async (request: Request, response: Response) => {
   try {
-    const { email, password, fullName } = request.body;
+    const { login, password, name } = request.body;
 
-    const user = await register(email, password, fullName);
+    const user = await register(login, password, name);
 
     return response.json({ user });
-  } catch (e: any) {
+  } catch (error: any) {
     return response.status(400).json({
       code: 400,
       error: 'Bad Request',
-      message: e.message,
+      message: error.message,
     });
   }
 };
