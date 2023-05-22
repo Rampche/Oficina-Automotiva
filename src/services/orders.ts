@@ -31,14 +31,8 @@ const create = async (
   carId: string,
   userId: string,
   itemIds: string[]
-) => {
-  const items = await prisma.item.findMany({
-    where: {
-      registration: { in: itemIds },
-    },
-  });
-
-  return prisma.order.create({
+) =>
+  prisma.order.create({
     data: {
       ...order,
       car: {
@@ -48,16 +42,18 @@ const create = async (
         connect: { user_id: userId },
       },
       items: {
-        connect: items.map((item) => ({ registration: item.registration })),
+        connect: itemIds.map((item) => ({ item_id: item })),
       },
     },
+    include: {
+      items: true,
+    },
   });
-};
 
 //Update orders
 const update = (
   order_id: string,
-  /* itemIds: string[], */
+  itemIds: string[],
   carId: string,
   userId: string
 ) =>
@@ -65,10 +61,11 @@ const update = (
     where: {
       order_id,
     },
+
     data: {
-      /* items: {
+      items: {
         connect: itemIds.map((itemId) => ({ item_id: itemId })),
-      }, */
+      },
       car: {
         connect: { car_id: carId },
       },
