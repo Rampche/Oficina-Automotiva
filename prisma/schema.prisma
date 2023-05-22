@@ -36,8 +36,7 @@ model Order {
   order_date_time DateTime @default(now()) @db.Timestamp(3)
   total           Float?   @db.Float
   deleted         Boolean  @default(false)
-  car             Car      @relation(fields: [carId], references: [car_id])
-  carId           String   @unique
+  car             Car[]
   userId          String
   user            User     @relation(fields: [userId], references: [user_id])
   items           Item[]
