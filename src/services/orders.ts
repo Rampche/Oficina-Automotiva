@@ -39,6 +39,7 @@ const create = async (
     },
   });
 
+  //*Calculate the total
   const total = items.reduce((sum, item) => sum + item.value, 0);
 
   const newOrder = await prisma.order.create({
@@ -63,29 +64,46 @@ const create = async (
 };
 
 //Update orders
-const update = (
+const update = async (
+  newOrderData: Order,
   order_id: string,
-  itemIds: string[],
   carId: string,
-  userId: string
-) =>
-  prisma.order.update({
+  userId: string,
+  itemIds: string[]
+) => {
+  //*Obtain the items
+  const items = await prisma.item.findMany({
+    where: {
+      item_id: { in: itemIds },
+    },
+  });
+
+  const updatedTotal = items.reduce((sum, item) => sum + item.value, 0);
+
+  const updatedOrder = await prisma.order.update({
     where: {
       order_id,
     },
 
     data: {
-      items: {
-        connect: itemIds.map((itemId) => ({ item_id: itemId })),
-      },
+      ...newOrderData,
+      total: updatedTotal,
       car: {
         connect: { car_id: carId },
       },
       user: {
         connect: { user_id: userId },
       },
+      items: {
+        connect: itemIds.map((item) => ({ item_id: item })),
+      },
+    },
+    include: {
+      items: true,
     },
   });
+  return updatedOrder;
+};
 
 //Remove orders
 const remove = (order_id: string) => {

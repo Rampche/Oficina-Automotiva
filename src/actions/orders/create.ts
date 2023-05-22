@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import { create } from '../../services/orders';
 import { Order } from '../../models/order';
-
-interface OrderData {
-  user: string;
-  car: string;
-  items: string[];
-}
+import { OrderData } from '../../models/order';
 
 export default async (req: Request, res: Response) => {
   const { ...order }: Order = req.body;
