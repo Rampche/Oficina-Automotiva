@@ -31,10 +31,20 @@ const create = async (
   carId: string,
   userId: string,
   itemIds: string[]
-) =>
-  prisma.order.create({
+) => {
+  //*Obtain the items
+  const items = await prisma.item.findMany({
+    where: {
+      item_id: { in: itemIds },
+    },
+  });
+
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+
+  const newOrder = await prisma.order.create({
     data: {
       ...order,
+      total: total,
       car: {
         connect: { car_id: carId },
       },
@@ -49,6 +59,8 @@ const create = async (
       items: true,
     },
   });
+  return newOrder;
+};
 
 //Update orders
 const update = (
