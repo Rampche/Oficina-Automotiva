@@ -6,5 +6,8 @@ WORKDIR /src/index
 COPY package.json .
 COPY . .
 RUN npm i
+RUN npm install @prisma/client
+#RUN npx prisma db push
+RUN npx prisma migrate dev --name oficina_mecanica --preview-feature
 CMD npm run dev
 EXPOSE 3001
